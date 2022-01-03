@@ -34,3 +34,8 @@ export interface Categories {
     id?: number;
     name: string;
 }
+
+export interface Payload extends UsersTable {
+    id?: number;
+    role?:number;
+}

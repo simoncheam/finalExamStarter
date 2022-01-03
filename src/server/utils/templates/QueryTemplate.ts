@@ -1,6 +1,6 @@
 import { Query } from "../index";
 import { MysqlResponse } from "../models";
-import { Books, Categories } from "../../types"
+import { Books, Categories, Users } from "../../types"
 
 
 //get all
@@ -21,6 +21,8 @@ const create = (new_book: Books) => {
     return Query(`INSERT INTO Books SET ?`, [new_book]);
 }
 
+const getUserBy = (column_name: string, value: string | number) =>
+    Query<Users[]>("SELECT * FROM Users WHERE ??=?", [column_name, value]);
 
 //delete
 const destroy = (id: Books['id'], userid: number) => Query("DELETE FROM Books WHERE id=? and userid=?", [id, userid]);
@@ -33,3 +35,7 @@ export default {
     destroy
 
 };
+
+import booksDB from '../../database/queries/books'
+import usersDB from '../../database/queries/users';
+

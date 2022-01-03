@@ -2,8 +2,26 @@
 
 
 import * as express from 'express';
+import { ReqUser } from '../../types';
 
 const router = express.Router();
+
+// users
+    import { Users } from '../../types'
+    import { ReqUser } from '../../types'
+    import usersDB from '../../database/queries/users'
+    import booksDB from '../../database/queries/books'
+
+//categories
+    import { tokenCheck } from '../../middleware/tokenCheck.mw';
+    import { ReqUser } from '../../types';
+    import categoriesDB from '../../database/queries/categories'
+
+
+//books
+    import { tokenCheck } from '../../middleware/tokenCheck.mw';
+    import { ReqUser } from '../../types';
+    import booksDB from '../../database/queries/books'
 
 
 router.get('/', async (req, res) => {
@@ -19,6 +37,20 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
+
+    const id = Number(req.params.id);
+
+    try {
+       // const results = await DB.get_one_by_id();
+
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "A server errors occurred", error: error.sqlMessage });
+    }
+})
+
+router.put('/:id', async (req: ReqUser, res) => {
     try {
        // const results = await DB.get_all();
 
@@ -29,18 +61,14 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.put('/:id', async (req, res) => {
-    try {
-       // const results = await DB.get_all();
+router.post('/', async (req: ReqUser, res) => {
 
+    //users
+        const { name, email, password }: Users = req.body;
         
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "A server errors occurred", error: error.sqlMessage });
-    }
-})
+        //input validation
 
-router.post('/', async (req, res) => {
+
     try {
        // const results = await DB.get_all();
 
@@ -52,8 +80,12 @@ router.post('/', async (req, res) => {
 })
 
 router.delete('/:id', async (req, res) => {
+
+    const id = Number(req.params.id);
+
+
     try {
-       // const results = await DB.get_all();
+       // const results = await DB.destroy(id);
 
         
     } catch (error) {
@@ -61,6 +93,58 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ message: "A server errors occurred", error: error.sqlMessage });
     }
 })
+
+
+// auth/register.ts       ------------------------
+
+
+import * as jwt from 'jsonwebtoken';
+import config, { jwt_config} from '../../config';
+import usersDB from '../../database/queries/users';
+import {Router} from 'express';
+import { generateHash} from '../../utils/passwords'
+
+const router = Router();
+
+router.post('/', async (req, res) => {
+
+        const newUser = req.body;
+
+        try {
+            
+            // create new hash
+            newUser.password = generateHash(newUser.password);
+
+            //insert new user into db
+            const result = await usersDB.create(newUser);
+
+            result.insertId  // jwt needs userid for token
+
+            console.log(result);
+
+            //create new token
+            const token = jwt.sign(
+
+                {userid: result.insertId, email: newUser.email},
+                config.jwt_config.secret,
+                {expiresIn: jwt_config.expiration}
+            );
+
+            res.status(200).json({message: 'successful registration', token});
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Server error occurred during registration', error})
+            
+        }
+
+})
+
+export default router;
+
+
+
+// auth/register.ts       ------------------------
 
 
 
@@ -103,6 +187,9 @@ router.post('/', passport.authenticate('local'), async ( req: ReqUser, res) => {
 
 //        ------------------------
 
+*** DON'T FORGET!
 
 export default router;
+
+
 */
