@@ -43,6 +43,8 @@ router.get('/:id', async (req, res) => {
     try {
        // const results = await DB.get_one_by_id();
 
+       //does user exist check? if/else
+
         
     } catch (error) {
         console.log(error);
@@ -52,7 +54,18 @@ router.get('/:id', async (req, res) => {
 
 router.put('/:id', async (req: ReqUser, res) => {
     try {
+        const id = Number(req.params.id);
+
+
        // const results = await DB.get_all();
+
+       if (bookUpdateResults.affectedRows) {
+
+            res.status(201).json({ message: "Updated Book!" }); //*tk
+
+        } else {
+            res.status(401).json({ message: "Not authorized!" }) //*tk;    
+        }
 
         
     } catch (error) {
@@ -67,6 +80,16 @@ router.post('/', async (req: ReqUser, res) => {
         const { name, email, password }: Users = req.body;
         
         //input validation
+
+        if (!name || !email || !password) {  // input validation // 
+        return res.status(400).json({ message: "Fill out everything!" })
+    }
+
+        if(!title || !author || !price || !categoryid ) { 
+            return res.status(400).json({ message: "Fill out everything!" })
+        }
+
+
 
 
     try {

@@ -13,7 +13,7 @@ const get_one_by_id = (id: number) => Query<Books[]>("SELECT * FROM Books WHERE 
 
 
 //put
-const update = (book: Books, id: Books['id'], userid: number) => Query("UPDATE Books SET ? WHERE id=? AND userid =?", [book, id, userid]);
+const update = (book: Books, id: Books['id']) => Query("UPDATE Books SET ? WHERE id=? AND userid =?", [book, id]);
 
 
 //post
@@ -25,7 +25,7 @@ const getUserBy = (column_name: string, value: string | number) =>
     Query<Users[]>("SELECT * FROM Users WHERE ??=?", [column_name, value]);
 
 //delete
-const destroy = (id: Books['id'], userid: number) => Query("DELETE FROM Books WHERE id=? and userid=?", [id, userid]);
+const destroy = (id: Books['id']) => Query("DELETE FROM Books WHERE id=? and userid=?", [id ]);
 
 export default {
     get_all,
