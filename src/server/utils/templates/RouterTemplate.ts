@@ -205,6 +205,13 @@ router.post('/', passport.authenticate('local'), async ( req: ReqUser, res) => {
 
 
 
+// auth/validate.ts       ------------------------
+
+router.get('/', tokenCheck, async(req: ReqUser, res) => {
+
+    res.status(200).json( {message: 'valid'});
+
+})
 
 
 
