@@ -35,7 +35,7 @@ const getUserBy = (column_name: string, value: string | number) =>
     Query<Users[]>("SELECT * FROM Users WHERE ??=?", [column_name, value]);
 
 //delete
-const destroy = (id: Books['id']) => Query("DELETE FROM Books WHERE id=? and userid=?", [id]);
+const destroy = (id: Books['id']) => Query("DELETE FROM Books WHERE id=?", [id]);
 
 export default {
     get_all,
